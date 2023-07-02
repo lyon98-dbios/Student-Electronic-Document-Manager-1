@@ -1,0 +1,88 @@
+<!-- profile.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        </div>
+        <h2>Lead City University</h2>
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="{{ url_for('logout') }}">Log out</a></li>
+        </ul>
+    </nav>
+
+    <div class="sidebar">
+        <div class="admin-container">
+            <div class="admin-item active">
+                <a href="{{ url_for('profile') }}">
+                    <img src="{{ url_for('static', filename='images/profile.png') }}" alt="View my Profile">
+                    <p>View my Profile</p>
+                </a>
+            </div>
+            <div class="admin-item">
+                <a href="{{ url_for('quick_search') }}">
+                    <img src="{{ url_for('static', filename='images/search.png') }}" alt="Quick Search">
+                    <p>Quick Search</p>
+                </a>
+            </div>
+            <div class="admin-item">
+                <a href="{{ url_for('download_document', document_id=document.id) }}">Download Document</a>">
+                    <img src="{{ url_for('static', filename='images/download.png') }}" alt="Download Document">
+                    <p>Download Document</p>
+                </a>
+            </div>
+            <div class="admin-item">
+                <a href="{{ url_for('upload_document') }}">
+                    <img src="{{ url_for('static', filename='images/upload.png') }}" alt="Upload Document">
+                    <p>Upload Document</p>
+                </a>
+            </div>
+            <div class="admin-item">
+                {% if document %}
+                <a href="{{ url_for('edit_document', document_id=document.id) }}">Edit Document</a>
+                {% endif %}
+                <img src="{{ url_for('static', filename='images/edit.png') }}" alt="Edit Document">
+                <p>Edit Document</p>
+                </a>
+            </div>
+            <div class="admin-item">
+                <a href="#">
+                    <img src="{{ url_for('static', filename='images/delete.png') }}" alt="Delete Document">
+                    <p>Delete Document</p>
+                </a>
+            </div>
+            <div class="admin-item">
+                <a href="{{ url_for('send_document') }}">
+                    <img src="{{ url_for('static', filename='images/send.png') }}" alt="Send Document">
+                    <p>Send Document</p>
+                </a>
+            </div>
+            <div class="admin-item">
+                <a href="{{ url_for('user_management') }}">
+                    <img src="{{ url_for('static', filename='images/manage.png') }}" alt="Manage User">
+                    <p>Manage User</p>
+                </a>
+            </div>
+            <div class="admin-item">
+                <a href="{{ url_for('manage_logs') }}">
+                    <img src="{{ url_for('static', filename='images/logs.png') }}" alt="Manage Document Logs">
+                    <p>Manage Logs</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    <h1>User Profile</h1>
+    <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+    <p>Matric Number: {{ user.matric_no }}</p>
+    <p>Department: {{ user.department }}</p>
+    <p>Phone Number: {{ user.phone_number }}</p>
+    <p>Documents Uploaded: {{ document_count }}</p>
+    <p>Documents Sent: {{ sent_count }}</p>
+    <p>Documents Received: {{ received_count }}</p>
+</body>
+</html>

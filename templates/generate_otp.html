@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OTP Generated</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='generate_otp.css') }}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('admin_index') }}">Home</a></li>
+            <li><a href="{{ url_for('user_management') }}">Go Back</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>OTP Generated</h1>
+        <p>OTP: {{ otp }}</p>
+        <p>Matric Number: {{ matric_number }}</p>
+    </div>
+</body>
+</html>

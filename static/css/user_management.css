@@ -1,0 +1,182 @@
+/* user_management.css */
+
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the logo */
+.logo img {
+  height: 40px;
+}
+
+.h2 {
+
+  display: flex;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Style for the navigation links */
+ul {
+  display: flex;
+  list-style: none;
+}
+
+ul li {
+  margin-left: 1rem;
+}
+
+ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 200px;
+  background-color: #5236B9;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.sidebar .admin-item {
+  margin-bottom: 20px;
+}
+
+.sidebar .admin-item a {
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar .admin-item img {
+  width: 24px;
+  margin-right: 10px;
+}
+
+.sidebar .admin-item p {
+  margin: 0;
+}
+
+.sidebar .admin-item.active {
+  background-color: #6F4CD1;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.sidebar .admin-item.active a {
+  color: #fff;
+}
+
+.sidebar .admin-item.active p {
+  font-weight: bold;
+}
+
+/* Main Content Styles */
+.main-content {
+  margin-left: 200px;
+  padding: 20px;
+}
+
+.container {
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.actions .btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: purple;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+/* Table Styles */
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th,
+.user-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.user-table th {
+  background-color: purple;
+  color: white;
+}
+
+.user-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Pagination Styles */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.page-input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
+  width: 50px;
+}
+
+.go-btn {
+  padding: 8px 16px;
+  background-color: purple;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* FontAwesome Icons */
+.fa-edit,
+.fa-trash {
+  color: purple;
+  cursor: pointer;
+}

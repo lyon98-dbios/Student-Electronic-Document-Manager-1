@@ -1,0 +1,42 @@
+body{
+    background-color: #6c63ff;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+nav {
+    background-color: #4a43a2;
+    padding: 10px;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.container h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.container p {
+    font-size: 20px;
+    margin-bottom: 10px;
+}

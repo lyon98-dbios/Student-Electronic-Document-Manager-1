@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/edit_user.css') }}">
+</head>
+<body class="purple-theme">
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('admin_index') }}">Home</a></li>
+            <li><a href="{{ url_for('user_management') }}">Go Back</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Edit Users</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Matric No</th>
+                    <th>Password</th>
+                    <th>Department</th>
+                    <th>Phone Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user[0] }}</td>
+                    <td contenteditable="True">{{ user[1] }}</td>
+                    <td contenteditable="True">{{ user[2] }}</td>
+                    <td contenteditable="True">{{ user[3] }}</td>
+                    <td contenteditable="True">{{ user[4] }}</td>
+                    <td contenteditable="True">{{ user[5] }}</td>
+                    <td contenteditable="True">{{ user[6] }}</td>
+                    <td>
+                        <button onclick="saveChanges(this)">Save</button>
+                        <button onclick="cancelEdit(this)">Cancel</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

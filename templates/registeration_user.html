@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/registeration_user.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        </div>
+        <h2>Lead City University</h2>
+        
+    </nav>>
+  <div class="container">
+    <h1>Registration</h1>
+    <form action="/register" method="post">
+      <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" name="first-name" required>
+      </div>
+      <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input type="text" id="last-name" name="last-name" required>
+      </div>
+      <div class="form-group">
+        <label for="matric-no">Matric No.</label>
+        <input type="text" id="matric-no" name="matric-no" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" name="confirm-password" required>
+      </div>
+      <div class="form-group">
+        <label for="department">Department</label>
+        <select name="department" id="department">
+          <option value="Computer Science">Computer Science</option>
+          <option value="Information Technology">Information Technology</option>
+          <option value="Engineering">Engineering</option>
+          <option value="Business">Business</option>
+          <option value="Arts">Arts</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="phone-number">Phone Number</label>
+        <input type="text" id="phone-number" name="phone-number" required>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Register">
+      </div>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+body {
+    background-color: #f2e6ff;
+    font-family: Arial, sans-serif;
+    color: #333333;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the logo */
+.logo img {
+  height: 40px;
+}
+
+.h2 {
+
+  display: flex;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Style for the navigation links */
+ul {
+  display: flex;
+  list-style: none;
+}
+
+ul li {
+  margin-left: 1rem;
+}
+
+ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+h1 {
+    color: #800080;
+}
+
+form {
+    width: 400px;
+    margin: 0 auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #800080;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #800080;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+input[type="file"] {
+    margin-top: 10px;
+}
+
+input[type="submit"] {
+    background-color: #800080;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #660066;
+}
+
+a {
+    color: #800080;
+}
+
+.flash-message {
+    background-color: #ffd9ff;
+    border: 1px solid #ff99ff;
+    padding: 10px;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #800080;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 200px;
+    background-color: #5236B9;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .sidebar .admin-item {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar .admin-item a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  
+  .sidebar .admin-item img {
+    width: 24px;
+    margin-right: 10px;
+  }
+  
+  .sidebar .admin-item p {
+    margin: 0;
+  }
+  
+  .sidebar .admin-item.active {
+    background-color: #6F4CD1;
+    border-radius: 4px;
+    padding: 10px;
+  }
+  
+  .sidebar .admin-item.active a {
+    color: #fff;
+  }
+  
+  .sidebar .admin-item.active p {
+    font-weight: bold;
+  }

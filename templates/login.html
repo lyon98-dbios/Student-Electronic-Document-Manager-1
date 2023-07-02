@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login Page - Lead City University Electronic Document Manager</title>
+	<style>
+		body {
+			background-color: #f5f5f5;
+			font-family: sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+
+		.container {
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+		}
+
+		.logo {
+			text-align: center;
+			margin-bottom: 40px;
+		}
+
+		.logo img {
+			max-width: 100px;
+		}
+
+		.login-box {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+
+		.endoc-login, .otp-login {
+			background-color: white;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+			border-radius: 5px;
+			padding: 20px;
+			margin: 20px;
+			flex: 1;
+			max-width: auto;
+		}
+
+		.endoc-login h2, .otp-login h2 {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+
+		.endoc-login label, .otp-login label {
+			display: block;
+			margin-bottom: 5px;
+		}
+
+		.endoc-login input[type="text"], .endoc-login input[type="password"], .otp-login input[type="text"] {
+			width: 90%;
+			padding: 10px;
+			margin-bottom: 20px;
+			border: none;
+			border-radius: 5px;
+			box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+		}
+
+		.endoc-login input[type="submit"], .otp-login input[type="submit"] {
+			display: block;
+			margin: 0 auto;
+			padding: 10px 20px;
+			background-color: #0f9d58;
+			color:white;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		
+		.endoc-login input[type="submit"]:hover, .otp-login input[type="submit"]:hover {
+			background-color: #0c7d43;
+		}
+		
+		.note {
+			text-align: center;
+			margin-top: 40px;
+			font-size: 14px;
+			color: #999;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="logo">
+			<img src="{{ url_for('static', filename='images/logo.png') }}">
+			<h1>Lead City University Student Electronic Document Manager</h1>
+		</div>
+		<div class="login-box">
+			<div class="endoc-login">
+				<h2>Endoc|User Login</h2>
+				<form action="" method="post">
+					<label for="username">Username:</label>
+					<input type="text" id="username" name="username" placeholder="Enter your username" required>
+					<label for="password">Password:</label>
+					<input type="password" id="password" name="password" placeholder="Enter your password" required>
+				    <input type="submit" value="Login">
+                </form>
+                    </div>
+            <div class="otp-login">
+                <h2>First-Time User Login</h2>
+                <form action="" method="post">
+                    <label for="otp">OTP:</label>
+                    <input type="text" id="otp" name="otp" placeholder="Enter your OTP" required>
+                    <input type="submit" value="Create User">
+                </form>
+            </div>
+        </div>
+        <div class="note">
+            <p>Note:<br>New Users should use the First Time User Field, and provide the OTP.<br>Returning users should use the Endoc field, and provide their username and password.</p>
+        </div>
+    </div>
+</body>
+</html>

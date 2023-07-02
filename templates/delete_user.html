@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/delete_user.css') }}">
+</head>
+<body>
+    <nav class="purple-theme">
+        <ul>
+            <li><a href="{{ url_for('user_management') }}">Go Back</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Delete Users</h1>
+        <form action="{{ url_for('delete_user') }}" method="POST">
+            <table>
+                <tr>
+                    <th></th>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Matric No</th>
+                    <th>Password</th>
+                    <th>Department</th>
+                    <th>Phone Number</th>
+                </tr>
+                {% for user in users %}
+                <tr>
+                    <td><input type="checkbox" name="selected_users" value="{{ user[0] }}"></td>
+                    <td>{{ user[0] }}</td>
+                    <td>{{ user[1] }}</td>
+                    <td>{{ user[2] }}</td>
+                    <td>{{ user[3] }}</td>
+                    <td>{{ user[4] }}</td>
+                    <td>{{ user[5] }}</td>
+                    <td>{{ user[6] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <div class="button-group">
+                <button type="submit" name="delete_selected" value="true">Delete Selected</button>
+                <button type="submit" name="delete_all" value="true">Delete All</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

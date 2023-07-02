@@ -1,0 +1,123 @@
+/* Global Styles */
+body {
+    background-color: #f6f4fd;
+    color: #333;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* Navigation */
+  nav {
+    background-color: #6a0080;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    margin-right: 10px;
+  }
+  
+  h2 {
+    font-size: 18px;
+    margin: 0;
+  }
+  /* Sidebar Styles */
+.sidebar {
+  width: 200px;
+  background-color: #5236B9;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.sidebar .admin-item {
+  margin-bottom: 20px;
+}
+
+.sidebar .admin-item a {
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar .admin-item img {
+  width: 24px;
+  margin-right: 10px;
+}
+
+.sidebar .admin-item p {
+  margin: 0;
+}
+
+.sidebar .admin-item.active {
+  background-color: #6F4CD1;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.sidebar .admin-item.active a {
+  color: #fff;
+}
+
+.sidebar .admin-item.active p {
+  font-weight: bold;
+}
+
+  /* Table Styles */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  thead {
+    background-color: #6a0080;
+    color: #fff;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f1eaff;
+  }
+  
+  tbody tr:hover {
+    background-color: #e3d7ff;
+  }
+  
+  /* Delete Icon */
+  .fa-trash {
+    color: #6a0080;
+  }
+  
+  /* Link Styles */
+  a {
+    color: #6a0080;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add User</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_user.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        </div>
+        <h2>Lead City University</h2>
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="{{ url_for('user_management') }}">Go Back</a></li>
+            <li><a href="{{ url_for('logout') }}">Log out</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Add User</h1>
+        <form method="POST" action="{{ url_for('generate_otp') }}">
+            <label for="matric-number">Matric Number:</label>
+            <input type="text" id="matric-number" name="matric-number" required>
+
+            <button type="submit" class="generate-otp-button">Generate OTP</button>
+        </form>
+    </div>
+</body>
+</html>

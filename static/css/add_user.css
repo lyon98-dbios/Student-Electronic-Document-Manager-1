@@ -1,0 +1,78 @@
+body{
+    background-color: #9b59b6;
+    color: #ffffff;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style for the logo */
+  .logo img {
+    height: 40px;
+  }
+  
+  .h2 {
+  
+    display: flex;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  /* Style for the navigation links */
+  ul {
+    display: flex;
+    list-style: none;
+  }
+  
+  ul li {
+    margin-left: 1rem;
+  }
+  
+  ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.container label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.container .generate-otp-button {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    background-color: #8e44ad;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.container .generate-otp-button:hover {
+    background-color: #6c3483;
+}

@@ -1,0 +1,66 @@
+body {
+    background-color: #292E34;
+    color: #FFF;
+    font-family: sans-serif;
+  }
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style for the logo */
+  .logo img {
+    height: 40px;
+  }
+  
+  .h2 {
+  
+    display: flex;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .container {
+    width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #3D434E;
+    border-radius: 5px;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-top: 0;
+  }
+  
+  .form-group {
+    margin-bottom: 10px;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  input[type="submit"] {
+    background-color: #000;
+    color: #FFF;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

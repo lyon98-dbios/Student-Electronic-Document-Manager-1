@@ -1,0 +1,116 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f2e6ff;
+    color: #4d3385;
+}
+
+h1 {
+    text-align: center;
+}
+
+.log-container {
+    margin-top: 20px;
+}
+
+.log-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.log-list li {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #eae4ff;
+}
+
+p {
+    font-style: italic;
+    color: #8c66b3;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 200px;
+    background-color: #5236B9;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .sidebar .admin-item {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar .admin-item a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  
+  .sidebar .admin-item img {
+    width: 24px;
+    margin-right: 10px;
+  }
+  
+  .sidebar .admin-item p {
+    margin: 0;
+  }
+  
+  .sidebar .admin-item.active {
+    background-color: #6F4CD1;
+    border-radius: 4px;
+    padding: 10px;
+  }
+  
+  .sidebar .admin-item.active a {
+    color: #fff;
+  }
+  
+  .sidebar .admin-item.active p {
+    font-weight: bold;
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style for the logo */
+  .logo img {
+    height: 40px;
+  }
+  
+  .h2 {
+  
+    display: flex;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  /* Style for the navigation links */
+  ul {
+    display: flex;
+    list-style: none;
+  }
+  
+  ul li {
+    margin-left: 1rem;
+  }
+  
+  ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }

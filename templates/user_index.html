@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_index.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        </div>
+        <h2>Lead City University</h2>
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="{{ url_for('logout') }}">Log out</a></li>
+        </ul>
+    </nav>
+    <div class="admin-container">
+        <div class="admin-item">
+            <a href="{{ url_for('profile') }}">
+                <img src="{{ url_for('static', filename='images/profile.png') }}" alt="View my Profile">
+                <p>View my Profile</p>
+            </a>
+        </div>
+        <div class="admin-item">
+            <a href="{{ url_for('quick_search') }}">
+                <img src="{{ url_for('static', filename='images/search.png') }}" alt="Quick Search">
+                <p>Quick Search</p>
+            </a>
+        </div>
+        <div class="admin-item">
+            <a href="{{ url_for('Download_document') }}">
+                <img src="{{ url_for('static', filename='images/download.png') }}" alt="Download Document">
+                <p>Download Document</p>
+            </a>
+        </div>
+        <div class="admin-item">
+            <a href="{{ url_for('upload_document') }}">
+                <img src="{{ url_for('static', filename='images/upload.png') }}" alt="Upload Document">
+                <p>Upload Document</p>
+            </a>
+        </div>
+        <div class="admin-item">
+            <a href="{{ url_for('edit_document') }}">
+                <img src="{{ url_for('static', filename='images/edit.png') }}" alt="Edit Document">
+                <p>Edit Document</p>
+            </a>
+        </div>
+        <div class="admin-item">
+            <a href="{{ url_for('delete_document') }}">
+                <img src="{{ url_for('static', filename='images/delete.png') }}" alt="Delete Document">
+                <p>Delete Document</p>
+            </a>
+        </div>
+        <div class="admin-item">
+            <a href="{{ url_for('send_document') }}">
+                <img src="{{ url_for('static', filename='images/send.png') }}" alt="Send Document">
+                <p>Send Document</p>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
