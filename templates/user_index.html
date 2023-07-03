@@ -22,40 +22,30 @@
                 <p>View my Profile</p>
             </a>
         </div>
+        {% for document in documents %}
         <div class="admin-item">
-            <a href="{{ url_for('quick_search') }}">
-                <img src="{{ url_for('static', filename='images/search.png') }}" alt="Quick Search">
-                <p>Quick Search</p>
-            </a>
-        </div>
-        <div class="admin-item">
-            <a href="{{ url_for('Download_document') }}">
+            <a href="{{ url_for('download_document', doc_id=document.id) }}">
                 <img src="{{ url_for('static', filename='images/download.png') }}" alt="Download Document">
                 <p>Download Document</p>
             </a>
         </div>
         <div class="admin-item">
-            <a href="{{ url_for('upload_document') }}">
-                <img src="{{ url_for('static', filename='images/upload.png') }}" alt="Upload Document">
-                <p>Upload Document</p>
-            </a>
-        </div>
-        <div class="admin-item">
-            <a href="{{ url_for('edit_document') }}">
+            <a href="{{ url_for('edit_document', doc_id=document.id) }}">
                 <img src="{{ url_for('static', filename='images/edit.png') }}" alt="Edit Document">
                 <p>Edit Document</p>
             </a>
         </div>
         <div class="admin-item">
-            <a href="{{ url_for('delete_document') }}">
+            <a href="{{ url_for('delete_document', doc_id=document.id) }}">
                 <img src="{{ url_for('static', filename='images/delete.png') }}" alt="Delete Document">
                 <p>Delete Document</p>
             </a>
         </div>
+        {% endfor %}
         <div class="admin-item">
-            <a href="{{ url_for('send_document') }}">
-                <img src="{{ url_for('static', filename='images/send.png') }}" alt="Send Document">
-                <p>Send Document</p>
+            <a href="{{ url_for('upload_document') }}">
+                <img src="{{ url_for('static', filename='images/upload.png') }}" alt="Upload Document">
+                <p>Upload Document</p>
             </a>
         </div>
     </div>

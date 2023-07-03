@@ -13,11 +13,13 @@ from wtforms import FileField
 from flask_wtf.file import FileAllowed, FileRequired
 from flask import make_response
 import psycopg2
+from flask import send_file
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = "secret_key"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:icecreamK9.@localhost:5432/student_doc'
+app.config['FILES'] = 'files' 
 
 db = SQLAlchemy(app)
 #Define Student, Admin and OTP Model
@@ -49,7 +51,7 @@ ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx', 'txt', 'pptx', 'jpeg', 'png', 'jpg']
 
 class DocumentForm(FlaskForm):
     file = FileField('File', validators=[FileRequired(), FileAllowed(ALLOWED_EXTENSIONS, 'Only DOCX, TXT, PPTX, JPG, PNG, JPEG, DOC, and PDF files allowed.')])
-    
+
 '''class DocumentForm(FlaskForm):
     file = FileField('File', validators=[FileAllowed(ALLOWED_EXTENSIONS, 'Only DOCX, TXT, PPTX, JPG, PNG, JPEG, DOC and PDF files allowed.')])'''
 class Doc(db.Model):
@@ -69,26 +71,32 @@ conn = psycopg2.connect(
 
 cursor = conn.cursor()
 
-#Upload Document
+
+# Upload Document
 @app.route('/upload_document', methods=['GET', 'POST'])
-def upload_doc():
-    form = DocumentForm()   #Define file type 
+def upload_document():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file:
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['FILES'], filename)
+            file.save(file_path)
 
-    if form.validate_on_submit():
-        file = form.file.data
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['FILES'], filename))
+            # Create Doc Instance
+            new_doc = Doc(file=file_path, filename=request.form['filename'], description=request.form['description'], access_type=request.form['access-type'])
+            db.session.add(new_doc)
+            db.session.commit()
 
-        #Create Doc Instance
-        new_doc = Doc(file=filename, name=form.name.data, description=form.description.data, access_type=form.access_type.data)
-        db.session.add(new_doc)
-        db.session.commit()
-
-        #Return successful upload
-        response = make_response("Document uploaded sucessfully!", 200)
-        return response
+            flash('Document uploaded successfully.')
+            # Get the ID of the newly created document
+            doc_id = new_doc.id
+            return redirect(url_for('user_index', doc_id=doc_id))
+        else:
+            flash('No file selected.')
+            return redirect(url_for('upload_document'))
     else:
-        return render_template('upload_document.html', form=form)
+        return render_template('upload_document.html')
+
 
 #Functions
 # Check if user is logged in
@@ -101,13 +109,20 @@ def login_required(f):
 
     return decorated_function
 
-#Insert user into table
+
 def save_user(first_name, last_name, matric_no, passkey, department, phone_number):
-    query = "INSERT INTO students (first_name, last_name, matric_no, passkey, department, phone_number) VALUES (%s, %s, %s, %s, %s, %s)"
-    cursor.execute(query, (first_name, last_name, matric_no, passkey, department, phone_number))
-    user_id = cursor.fetchone()[0] # Get the last inserted row ID
-    conn.commit() 
-    return user_id
+    try:
+        with conn.cursor() as cursor:
+            query = "INSERT INTO students (first_name, last_name, matric_no, passkey, department, phone_number) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id"
+            cursor.execute(query, (first_name, last_name, matric_no, passkey, department, phone_number))
+            user_id = cursor.fetchone()[0]  # Get the last inserted row ID
+            conn.commit()
+            return user_id
+    except psycopg2.Error as e:
+        # Handle the error (e.g., log it or display an error message)
+        print("Error saving user:", e)
+        return None
+
 
 #Retrive Docs
 def get_uploaded_docs():
@@ -147,7 +162,7 @@ def retrieve_document_id(doc_id):
 #Database Queries
 def query_db(matric_no):
     cursor = conn.cursor()
-    query = "SELECT paskey FROM Students WHERE matric_no = %s"
+    query = "SELECT passkey FROM Students WHERE matric_no = %s"
     cursor.execute(query, (matric_no,))
     result = cursor.fetchone()
     cursor.close()
@@ -180,7 +195,15 @@ def admin_index(): # Replace with your implementationplate('admin_index.html')
 @app.route('/user_index')
 @login_required
 def user_index():
-    return render_template('user_index.html')
+    # Retrieve the documents from the database
+    documents = Doc.query.all()
+
+    # Pass the documents to the template context
+    return render_template('user_index.html', documents=documents)
+
+
+
+
 
 
 @app.route('/profile')
@@ -224,19 +247,18 @@ def edit_document(doc_id):
         document = cursor.fetchone()
         cursor.close()
         
-        return render_template('edit_document.html', document=document)
+        return render_template('edit_document.html', doc_id=doc_id)
 
 # User management
 @app.route("/user_management")
 def user_management():
-    document = []
     # Fetch all user data from the database
-    cursor = db.connection.cursor()
+    cursor = conn.cursor()
     query = "SELECT * FROM Students"
-    cursor .execute(query)
+    cursor.execute(query)
     users = cursor.fetchall()
     cursor.close()
-    return render_template('user_management.html', Users=users, document=document)
+    return render_template('user_management.html', Users=users)
 
 
 # Add user
@@ -342,7 +364,9 @@ def delete_user():
 
 # Login page
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+def login(
+
+):
     if request.method == 'POST':
         if 'otp' in request.form:
             # Handle OTP submission
@@ -371,6 +395,29 @@ def login():
     return render_template('login.html')
 
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        first_name = request.form["first-name"]
+        last_name = request.form["last-name"]
+        matric_no = request.form["matric-no"]
+        passkey = request.form["password"]
+        confirm_password = request.form["confirm-password"]
+        department = request.form["department"]
+        phone_number = request.form["phone-number"]
+        
+        if passkey != confirm_password:
+            flash("Passwords do not match.")
+        else:
+            user_id = save_user(first_name, last_name, matric_no, passkey, department, phone_number)
+            if user_id is not None:
+                session['matric_no'] = matric_no
+                flash("Registration successful.")
+                return redirect(url_for('login'))
+            else:
+                flash("An error occurred during registration.")
+    
+    return render_template('registeration_user.html')
 
 
 @app.route('/logout')
@@ -382,35 +429,71 @@ def logout():
     return redirect(url_for('login'))
 
 
+from flask import send_file
 
+from flask import send_from_directory
+
+@app.route('/download_document/<doc_id>')
+def download_document(doc_id):
+    document = retrieve_document(doc_id)
+    if document:
+        return render_template('download_document.html', document=document)
+    else:
+        flash('Document not found.', 'error')
+        return redirect(url_for('user_index'))
+    
+@app.route('/download/<doc_id>')
+def download(doc_id):
+    document = Doc.query.get(doc_id)
+    if document:
+        file_path = os.path.join(app.config['FILES'], document.filename)
+        return send_from_directory(app.config['FILES'], file_path, as_attachment=True)
+    else:
+        flash('Document not found.', 'error')
+        return redirect(url_for('user_index'))
+    
+    
+# Delete Document
+@app.route('/delete_document/<doc_id>', methods=['GET', 'POST'])
+@login_required
+def delete_document(doc_id):
+    cursor = conn.cursor()
+    if request.method == 'POST':
+        # Retrieve the document details from the database
+        query = "SELECT * FROM Documents WHERE id = %s"
+        cursor.execute(query, (doc_id,))
+        document = cursor.fetchone()
+
+        if document:
+            # Delete the document from the database
+            query = "DELETE FROM Documents WHERE id = %s"
+            cursor.execute(query, (doc_id,))
+            conn.commit()
+
+            # Delete the document file from the server
+            file_path = document['file_path']
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+            flash('Document deleted successfully.')
+            return redirect(url_for('user_index'))
+        else:
+            flash('Document not found.')
+            return redirect(url_for('user_index'))
+        
+    else:
+        # Retrieve the document details from the database
+        query = "SELECT * FROM Documents WHERE id = %s"
+        cursor.execute(query, (doc_id,))
+        document = cursor.fetchone()
+        cursor.close()
+
+        if document:
+            return render_template('delete_document.html', doc_id=doc_id)
+        else:
+            flash('Document not found.')
+            return redirect(url_for('user_index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
 
-
-'''@app.route('/download_document/<document_id>', methods=['GET'])
-def download_document(document_id):
-    # Retrieve the document information from the database
-    cursor = db.connection.cursor()
-    query = "SELECT filename, file_path FROM documents WHERE document_id = %s"
-    cursor.execute(query, (document_id,))
-    document = cursor.fetchone()
-    cursor.close()
-
-    if document:
-        # Prepare the file path
-        file_path = document['file_path']
-        filename = document['filename']
-
-        # Check if the file exists
-        if os.path.exists(file_path):
-            # Prepare the response with appropriate headers
-            response = make_response(send_file(file_path, as_attachment=True, attachment_filename=filename))
-            return response
-        else:
-            return make_response("File not found.") 
-    else:
-        return make_response("Document not found.")
-    
-    return render_template('download_document.html')
-'''
