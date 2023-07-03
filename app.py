@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from functools import wraps
 from werkzeug.utils import secure_filename
 import os
-
 import random
 from flask import make_response
 import glob
@@ -11,7 +10,7 @@ from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import FileField
-from wtforms.validators import FileAllowed
+from flask_wtf.file import FileAllowed, FileRequired
 from flask import make_response
 import psycopg2
 
@@ -49,8 +48,10 @@ class OTP(db.Model):
 ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx', 'txt', 'pptx', 'jpeg', 'png', 'jpg']
 
 class DocumentForm(FlaskForm):
-    file = FileField('File', validators=[FileAllowed(ALLOWED_EXTENSIONS, 'Only DOCX, TXT, PPTX, JPG, PNG, JPEG, DOC and PDF files allowed.')])
-
+    file = FileField('File', validators=[FileRequired(), FileAllowed(ALLOWED_EXTENSIONS, 'Only DOCX, TXT, PPTX, JPG, PNG, JPEG, DOC, and PDF files allowed.')])
+    
+'''class DocumentForm(FlaskForm):
+    file = FileField('File', validators=[FileAllowed(ALLOWED_EXTENSIONS, 'Only DOCX, TXT, PPTX, JPG, PNG, JPEG, DOC and PDF files allowed.')])'''
 class Doc(db.Model):
     __tablename__ = 'docs'
     id = db.Column(db.Integer, primary_key=True)
@@ -61,9 +62,9 @@ class Doc(db.Model):
 
 conn = psycopg2.connect(
        host='localhost',
-       port='5437',
+       port='5432',
        database='student_doc',
-       user='posgres',
+       user='postgres',
        password='icecreamK9.')
 
 cursor = conn.cursor()
