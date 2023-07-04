@@ -14,11 +14,13 @@ from flask_wtf.file import FileAllowed, FileRequired
 from flask import make_response
 import psycopg2
 from flask import send_file
+from flask import send_from_directory
+
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = "secret_key"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:icecreamK9.@localhost:5432/student_doc'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost:5432/student_doc'
 app.config['FILES'] = 'files' 
 
 db = SQLAlchemy(app)
@@ -52,8 +54,6 @@ ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx', 'txt', 'pptx', 'jpeg', 'png', 'jpg']
 class DocumentForm(FlaskForm):
     file = FileField('File', validators=[FileRequired(), FileAllowed(ALLOWED_EXTENSIONS, 'Only DOCX, TXT, PPTX, JPG, PNG, JPEG, DOC, and PDF files allowed.')])
 
-'''class DocumentForm(FlaskForm):
-    file = FileField('File', validators=[FileAllowed(ALLOWED_EXTENSIONS, 'Only DOCX, TXT, PPTX, JPG, PNG, JPEG, DOC and PDF files allowed.')])'''
 class Doc(db.Model):
     __tablename__ = 'docs'
     id = db.Column(db.Integer, primary_key=True)
@@ -67,35 +67,11 @@ conn = psycopg2.connect(
        port='5432',
        database='student_doc',
        user='postgres',
-       password='icecreamK9.')
+       password='password')
 
 cursor = conn.cursor()
 
 
-# Upload Document
-@app.route('/upload_document', methods=['GET', 'POST'])
-def upload_document():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file:
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['FILES'], filename)
-            file.save(file_path)
-
-            # Create Doc Instance
-            new_doc = Doc(file=file_path, filename=request.form['filename'], description=request.form['description'], access_type=request.form['access-type'])
-            db.session.add(new_doc)
-            db.session.commit()
-
-            flash('Document uploaded successfully.')
-            # Get the ID of the newly created document
-            doc_id = new_doc.id
-            return redirect(url_for('user_index', doc_id=doc_id))
-        else:
-            flash('No file selected.')
-            return redirect(url_for('upload_document'))
-    else:
-        return render_template('upload_document.html')
 
 
 #Functions
@@ -124,26 +100,23 @@ def save_user(first_name, last_name, matric_no, passkey, department, phone_numbe
         return None
 
 
-#Retrive Docs
 def get_uploaded_docs():
     # Retrieve all documents from the database
     docs = Doc.query.all()
 
     uploaded_docs = []
     for doc in docs:
-        uploaded_docs.append(doc.file)
+        uploaded_docs.append(doc)
 
     return uploaded_docs
 
-#Retrive doc by doc id
 def retrieve_document(doc_id):
-    doc = Doc.query.filter_by(file=doc_id).first()
+    doc = Doc.query.get(doc_id)
     if doc:
         return doc
     else:
         return None
 
-# Retrieve file from doc
 def get_uploaded_file(doc_id):
     doc = Doc.query.get(doc_id)
     if doc:
@@ -151,13 +124,13 @@ def get_uploaded_file(doc_id):
     else:
         return None
 
-#Retrive doc by doc id
 def retrieve_document_id(doc_id):
-    doc = Doc.query.filter_by(file=doc_id).first()
+    doc = Doc.query.filter_by(id=doc_id).first()
     if doc:
         return doc.id
     else:
         return None
+
 
 #Database Queries
 def query_db(matric_no):
@@ -184,6 +157,70 @@ def query_db_otp(passkey):
     else:
         return None
 
+# Login page
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    
+    if request.method == 'POST':
+        if 'otp' in request.form:
+            # Handle OTP submission
+            otp = request.form['otp']
+            # Process OTP here
+            stored_otp = query_db_otp(otp)
+            if stored_otp is not None:
+                return redirect(url_for('register'))
+            else:
+                flash('Invalid OTP')
+        else:
+            # Handle username and password submission
+            matric_no = request.form['username']
+            passkey = request.form['password']
+            stored_password = query_db(matric_no)
+            # Process username and password here
+            if matric_no == 'admin' and passkey == 'admin':
+                session['username'] = matric_no
+                return redirect(url_for('admin_index'))
+            elif stored_password is not None and stored_password == passkey:
+                session['username'] = matric_no
+                return redirect(url_for('user_index'))
+            else:
+                flash('Invalid username or password')
+    # Display login form
+    return render_template('login.html')
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        first_name = request.form["first-name"]
+        last_name = request.form["last-name"]
+        matric_no = request.form["matric-no"]
+        passkey = request.form["password"]
+        confirm_password = request.form["confirm-password"]
+        department = request.form["department"]
+        phone_number = request.form["phone-number"]
+        
+        if passkey != confirm_password:
+            flash("Passwords do not match.")
+        else:
+            user_id = save_user(first_name, last_name, matric_no, passkey, department, phone_number)
+            if user_id is not None:
+                session['matric_no'] = matric_no
+                flash("Registration successful.")
+                return redirect(url_for('login'))
+            else:
+                flash("An error occurred during registration.")
+    
+    return render_template('registeration_user.html')
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    session.pop('username', None)
+    session.pop('logged_in', None)
+    flash('You have been logged out.')
+    return redirect(url_for('login'))
 
 
 #VIEW Functions
@@ -202,10 +239,6 @@ def user_index():
     return render_template('user_index.html', documents=documents)
 
 
-
-
-
-
 @app.route('/profile')
 @login_required
 def profile():
@@ -220,7 +253,93 @@ def profile():
         return render_template('profile.html', user=user)
     else:
         flash('User not found.')
-        return redirect(url_for('admin_index'))
+        return redirect(url_for('user_index'))
+
+# Upload Document
+@app.route('/upload_document', methods=['GET', 'POST'])
+def upload_document():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file:
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['FILES'], filename)
+            file.save(file_path)
+
+            # Create Doc Instance
+            new_doc = Doc(file=file_path, filename=request.form['filename'], description=request.form['description'], access_type=request.form['access-type'])
+            db.session.add(new_doc)
+            db.session.commit()
+
+            flash('Document uploaded successfully.')
+            # Get the ID of the newly created document
+            doc_id = new_doc.id
+            return redirect(url_for('user_index', doc_id=doc_id))
+        else:
+            flash('No file selected.')
+            return redirect(url_for('upload_document'))
+    else:
+        return render_template('upload_document.html')
+
+@app.route('/download_document/<int:doc_id>')
+def download_document(doc_id):
+    document = retrieve_document(str(doc_id))  # Convert doc_id to string
+    if document:
+        return render_template('download_document.html', document=document)
+    else:
+        flash('Document not found.', 'error')
+        return redirect(url_for('user_index'))
+
+@app.route('/download/<int:doc_id>')
+def download(doc_id):
+    document = retrieve_document(str(doc_id))  # Convert doc_id to string
+    if document:
+        file_path = os.path.join(app.config['FILES'], document.filename)
+        return send_from_directory(app.config['FILES'], file_path, as_attachment=True)
+    else:
+        flash('Document not found.', 'error')
+        return redirect(url_for('user_index'))
+    
+    
+# Delete Document
+@app.route('/delete_document/<doc_id>', methods=['GET', 'POST'])
+@login_required
+def delete_document(doc_id):
+    cursor = conn.cursor()
+    if request.method == 'POST':
+        # Retrieve the document details from the database
+        query = "SELECT * FROM Documents WHERE id = %s"
+        cursor.execute(query, (doc_id,))
+        document = cursor.fetchone()
+
+        if document:
+            # Delete the document from the database
+            query = "DELETE FROM Documents WHERE id = %s"
+            cursor.execute(query, (doc_id,))
+            conn.commit()
+
+            # Delete the document file from the server
+            file_path = document['file_path']
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+            flash('Document deleted successfully.')
+            return redirect(url_for('user_index'))
+        else:
+            flash('Document not found.')
+            return redirect(url_for('user_index'))
+        
+    else:
+        # Retrieve the document details from the database
+        query = "SELECT * FROM Documents WHERE id = %s"
+        cursor.execute(query, (doc_id,))
+        document = cursor.fetchone()
+        cursor.close()
+
+        if document:
+            return render_template('delete_document.html', doc_id=doc_id)
+        else:
+            flash('Document not found.')
+            return redirect(url_for('user_index'))
 
 
 @app.route('/edit_document/<doc_id>', methods=['GET', 'POST'])
@@ -323,6 +442,7 @@ def edit_user():
         cursor.close()
         
         return render_template('edit_user.html', users=users)
+
 # Route for the Delete User page
 @app.route('/delete_user', methods=['GET', 'POST'])
 def delete_user():
@@ -360,139 +480,6 @@ def delete_user():
         
         return render_template('delete_user.html', users=users)
 
-
-
-# Login page
-@app.route('/login', methods=['GET', 'POST'])
-def login(
-
-):
-    if request.method == 'POST':
-        if 'otp' in request.form:
-            # Handle OTP submission
-            otp = request.form['otp']
-            # Process OTP here
-            stored_otp = query_db_otp(otp)
-            if stored_otp is not None:
-                return redirect(url_for('register'))
-            else:
-                flash('Invalid OTP')
-        else:
-            # Handle username and password submission
-            matric_no = request.form['username']
-            passkey = request.form['password']
-            stored_password = query_db(matric_no)
-            # Process username and password here
-            if matric_no == 'admin' and passkey == 'admin':
-                session['username'] = matric_no
-                return redirect(url_for('admin_index'))
-            elif stored_password is not None and stored_password == passkey:
-                session['username'] = matric_no
-                return redirect(url_for('user_index'))
-            else:
-                flash('Invalid username or password')
-    # Display login form
-    return render_template('login.html')
-
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    if request.method == "POST":
-        first_name = request.form["first-name"]
-        last_name = request.form["last-name"]
-        matric_no = request.form["matric-no"]
-        passkey = request.form["password"]
-        confirm_password = request.form["confirm-password"]
-        department = request.form["department"]
-        phone_number = request.form["phone-number"]
-        
-        if passkey != confirm_password:
-            flash("Passwords do not match.")
-        else:
-            user_id = save_user(first_name, last_name, matric_no, passkey, department, phone_number)
-            if user_id is not None:
-                session['matric_no'] = matric_no
-                flash("Registration successful.")
-                return redirect(url_for('login'))
-            else:
-                flash("An error occurred during registration.")
-    
-    return render_template('registeration_user.html')
-
-
-@app.route('/logout')
-@login_required
-def logout():
-    session.pop('username', None)
-    session.pop('logged_in', None)
-    flash('You have been logged out.')
-    return redirect(url_for('login'))
-
-
-from flask import send_file
-
-from flask import send_from_directory
-
-@app.route('/download_document/<doc_id>')
-def download_document(doc_id):
-    document = retrieve_document(doc_id)
-    if document:
-        return render_template('download_document.html', document=document)
-    else:
-        flash('Document not found.', 'error')
-        return redirect(url_for('user_index'))
-    
-@app.route('/download/<doc_id>')
-def download(doc_id):
-    document = Doc.query.get(doc_id)
-    if document:
-        file_path = os.path.join(app.config['FILES'], document.filename)
-        return send_from_directory(app.config['FILES'], file_path, as_attachment=True)
-    else:
-        flash('Document not found.', 'error')
-        return redirect(url_for('user_index'))
-    
-    
-# Delete Document
-@app.route('/delete_document/<doc_id>', methods=['GET', 'POST'])
-@login_required
-def delete_document(doc_id):
-    cursor = conn.cursor()
-    if request.method == 'POST':
-        # Retrieve the document details from the database
-        query = "SELECT * FROM Documents WHERE id = %s"
-        cursor.execute(query, (doc_id,))
-        document = cursor.fetchone()
-
-        if document:
-            # Delete the document from the database
-            query = "DELETE FROM Documents WHERE id = %s"
-            cursor.execute(query, (doc_id,))
-            conn.commit()
-
-            # Delete the document file from the server
-            file_path = document['file_path']
-            if os.path.exists(file_path):
-                os.remove(file_path)
-
-            flash('Document deleted successfully.')
-            return redirect(url_for('user_index'))
-        else:
-            flash('Document not found.')
-            return redirect(url_for('user_index'))
-        
-    else:
-        # Retrieve the document details from the database
-        query = "SELECT * FROM Documents WHERE id = %s"
-        cursor.execute(query, (doc_id,))
-        document = cursor.fetchone()
-        cursor.close()
-
-        if document:
-            return render_template('delete_document.html', doc_id=doc_id)
-        else:
-            flash('Document not found.')
-            return redirect(url_for('user_index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
