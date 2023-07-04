@@ -19,33 +19,33 @@
   <div class="sidebar">
     <div class="admin-container">
       <div class="admin-item">
-          <a href="{{ url_for('profile') }}">
-              <img src="{{ url_for('static', filename='images/profile.png') }}" alt="View my Profile">
-              <p>View my Profile</p>
+        <a href="{{ url_for('profile') }}">
+            <img src="{{ url_for('static', filename='images/profile.png') }}" alt="View my Profile">
+            <p>View my Profile</p>
+        </a>
+      </div>
+      <div class="admin-item">
+          <a href="{{ url_for('download_document', doc_id=document.id) }}">
+              <img src="{{ url_for('static', filename='images/download.png') }}" alt="Download Document">
+              <p>Download Document</p>
           </a>
       </div>
       <div class="admin-item">
-          <a href="{{ url_for('download_document', doc_id=doc_id) }}">
-          <img src="{{ url_for('static', filename='images/download.png') }}" alt="Download Document">
-          <p>Download Document</p>
+          <a href="{{ url_for('edit_document', doc_id=document.id) }}">
+              <img src="{{ url_for('static', filename='images/edit.png') }}" alt="Edit Document">
+              <p>Edit Document</p>
+          </a>
+      </div>
+      <div class="admin-item">
+          <a href="{{ url_for('delete_document', doc_id=document.id) }}">
+              <img src="{{ url_for('static', filename='images/delete.png') }}" alt="Delete Document">
+              <p>Delete Document</p>
           </a>
       </div>
       <div class="admin-item active">
           <a href="{{ url_for('upload_document') }}">
               <img src="{{ url_for('static', filename='images/upload.png') }}" alt="Upload Document">
               <p>Upload Document</p>
-          </a>
-      </div>
-      <div class="admin-item">
-          <a href="{{ url_for('edit_document', doc_id=doc_id) }}">Edit Document</a>
-          <img src="{{ url_for('static', filename='images/edit.png') }}" alt="Edit Document">
-          <p>Edit Document</p>
-          </a>
-      </div>
-      <div class="admin-item">
-          <a href="#">
-              <img src="{{ url_for('static', filename='images/delete.png') }}" alt="Delete Document">
-              <p>Delete Document</p>
           </a>
       </div>
     </div>

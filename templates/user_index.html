@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Page</title>
+    <meta charset="UTF-8">
+    <title>User Page</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_index.css') }}">
 </head>
 <body>
@@ -22,26 +23,24 @@
                 <p>View my Profile</p>
             </a>
         </div>
-        {% for document in documents %}
         <div class="admin-item">
-            <a href="{{ url_for('download_document', doc_id=document.id) }}">
+            <a href="{{ url_for('download_document', doc_id=document.id | default('')) }}">
                 <img src="{{ url_for('static', filename='images/download.png') }}" alt="Download Document">
                 <p>Download Document</p>
             </a>
         </div>
         <div class="admin-item">
-            <a href="{{ url_for('edit_document', doc_id=document.id) }}">
+            <a href="{{ url_for('edit_document', doc_id=document.id | default('')) }}">
                 <img src="{{ url_for('static', filename='images/edit.png') }}" alt="Edit Document">
                 <p>Edit Document</p>
             </a>
         </div>
         <div class="admin-item">
-            <a href="{{ url_for('delete_document', doc_id=document.id) }}">
+            <a href="{{ url_for('delete_document', doc_id=document.id | default('')) }}">
                 <img src="{{ url_for('static', filename='images/delete.png') }}" alt="Delete Document">
                 <p>Delete Document</p>
             </a>
         </div>
-        {% endfor %}
         <div class="admin-item">
             <a href="{{ url_for('upload_document') }}">
                 <img src="{{ url_for('static', filename='images/upload.png') }}" alt="Upload Document">
